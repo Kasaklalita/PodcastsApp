@@ -1,4 +1,4 @@
-package com.example.podcastsapp
+package com.example.podcastsapp.screens
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
@@ -9,7 +9,10 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material.Card
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
@@ -17,41 +20,42 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.podcastsapp.Podcast
+import com.example.podcastsapp.R
 
+@Preview
 @Composable
 fun MainScreen() {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .scrollable(rememberScrollState(), orientation = Orientation.Vertical),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        PodcastsSection(
-            title = "Топовые подкасты",
-            modifier = Modifier.fillMaxWidth(),
-            podcasts = listOf(
-                Podcast(
-                    "Как-нибудь",
-                    "libo/libo",
-                    painterResource(id = R.drawable.ic_icon)
-                ),
-                Podcast(
-                    "Как-нибудь",
-                    "libo/libo",
-                    painterResource(id = R.drawable.ic_icon)
-                ),
-                Podcast(
-                    "Как-нибудь",
-                    "libo/libo",
-                    painterResource(id = R.drawable.ic_icon)
-                ),
-            )
+        TopBar(
+            text = "Подборка подкастов"
         )
         PodcastsSection(
             title = "Топовые подкасты",
             modifier = Modifier.fillMaxWidth(),
             podcasts = listOf(
+                Podcast(
+                    "Как-нибудь",
+                    "libo/libo",
+                    painterResource(id = R.drawable.ic_icon)
+                ),
+                Podcast(
+                    "Как-нибудь",
+                    "libo/libo",
+                    painterResource(id = R.drawable.ic_icon)
+                ),
+                Podcast(
+                    "Как-нибудь",
+                    "libo/libo",
+                    painterResource(id = R.drawable.ic_icon)
+                ),
                 Podcast(
                     "Как-нибудь",
                     "libo/libo",
@@ -72,13 +76,47 @@ fun MainScreen() {
     }
 }
 
+@Composable
+fun TopBar(
+    text: String,
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colorScheme.primary,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(backgroundColor)
+            .padding(16.dp)
+    ) {
+        Text(text = text, color = contentColor, style = MaterialTheme.typography.titleLarge, fontSize = 20.sp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_recent),
+                contentDescription = "Recent podcasts",
+                tint = contentColor
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_search),
+                contentDescription = "Recent podcasts",
+                tint = contentColor
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PodcastsSection(title: String, modifier: Modifier = Modifier, podcasts: List<Podcast>) {
     Card(modifier = modifier, elevation = 3.dp) {
         Column(
-            modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier.padding(vertical = 16.dp, horizontal = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Row(modifier = Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
                 Text(
@@ -94,9 +132,8 @@ fun PodcastsSection(title: String, modifier: Modifier = Modifier, podcasts: List
             }
             LazyVerticalGrid(
                 cells = GridCells.Fixed(3),
-                modifier = modifier.scale(1.01f),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 items(podcasts.size) {
                     PodcastCard(podcasts[it])
@@ -108,7 +145,7 @@ fun PodcastsSection(title: String, modifier: Modifier = Modifier, podcasts: List
 
 @Composable
 fun PodcastCard(podcast: Podcast, modifier: Modifier = Modifier) {
-    Column() {
+    Column(modifier = modifier) {
         Image(
             painter = podcast.image,
             contentDescription = null,
